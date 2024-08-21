@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2023, Oracle and/or its affiliates.
+Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+-->
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.oracle.cloud.spring</groupId>
+		<artifactId>spring-cloud-oci-starters</artifactId>
+		<version>1.2.0</version>
+	</parent>
+	<groupId>com.oracle.cloud.spring</groupId>
+	<artifactId>spring-cloud-oci-starter-gen-ai</artifactId>
+	<version>1.2.0</version>
+	<name>Spring Cloud OCI Gen AI Starter Module</name>
+	<description>Spring Cloud OCI Gen AI Starter Module</description>
+	<url>https://github.com/oracle/spring-cloud-oci/#spring-cloud-oci-documentation</url>
+	<licenses>
+		<license>
+			<name>The Universal Permissive License (UPL), Version 1.0</name>
+			<url>https://oss.oracle.com/licenses/upl/</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<name>Oracle</name>
+			<email>obaas_ww at oracle.com</email>
+			<organization>Oracle America, Inc.</organization>
+			<organizationUrl>https://www.oracle.com</organizationUrl>
+		</developer>
+	</developers>
+	<scm>
+		<connection>scm:git:https://github.com/oracle/spring-cloud-oci.git</connection>
+		<developerConnection>scm:git:git@github.com:oracle/spring-cloud-oci.git</developerConnection>
+		<url>https://github.com/oracle/spring-cloud-oci</url>
+	</scm>
+	<dependencies>
+		<dependency>
+			<groupId>com.oracle.cloud.spring</groupId>
+			<artifactId>spring-cloud-oci-starter</artifactId>
+			<version>1.2.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.cloud.spring</groupId>
+			<artifactId>spring-cloud-oci-gen-ai</artifactId>
+			<version>1.2.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<version>RELEASE</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.oci.sdk</groupId>
+			<artifactId>oci-java-sdk-objectstorage</artifactId>
+			<version>3.46.0</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.16.1</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.graalvm.buildtools</groupId>
+				<artifactId>native-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+
+<profiles>
+   <profile>
+     <id>native</id>
+     <build>
+       <plugins>
+         <plugin>
+           <groupId>org.graalvm.buildtools</groupId>
+           <artifactId>native-maven-plugin</artifactId>
+           <version>0.10.2</version>
+           <extensions>true</extensions>
+           <executions>
+             <execution>
+             <id>build-native</id>
+               <goals>
+                 <goal>compile-no-fork</goal>
+               </goals>
+               <phase>package</phase>
+             </execution>
+             <execution>
+             <id>test-native</id>
+               <goals>
+                 <goal>test</goal>
+               </goals>
+               <phase>test</phase>
+             </execution>
+           </executions>
+         </plugin>
+       </plugins>
+     </build>
+   </profile>
+ </profiles>
+</project>

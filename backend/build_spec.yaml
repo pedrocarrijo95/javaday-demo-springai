@@ -1,0 +1,62 @@
+version: 0.1
+component: build
+timeoutInSeconds: 9000
+#runAs: root
+shell: bash      
+env:
+  # these are local variables to the build config
+  variables:
+
+  # the value of a vaultVariable is the secret-id (in OCI ID format) stored in the OCI Vault service
+  # you can then access the value of that secret in your build_spec.yaml commands
+  vaultVariables:
+    user_ocid: <secret-vault-ocid>
+    fingerprint: <secret-vault-ocid>
+    bucket_preauth_pk: <secret-vault-ocid>
+    tenancy_ocid: <secret-vault-ocid>
+    region: <secret-vault-ocid>
+    
+    
+  # exportedVariables are made available to use as parameters in sucessor Build Pipeline stages
+  # For this Build to run, the Build Pipeline needs to have a BUILDRUN_HASH parameter set
+  exportedVariables:
+    - BUILDRUN_HASH
+steps:
+
+  - type: Command
+    name: "Define OCI Config File"
+    timeoutInSeconds: 40
+    command: |
+        mkdir ${OCI_WORKSPACE_DIR}/GitHubConnection/backend/src/.oci/
+        touch ${OCI_WORKSPACE_DIR}/GitHubConnection/backend/src/.oci/config
+        echo "[DEFAULT]" > ${OCI_WORKSPACE_DIR}/GitHubConnection/backend/src/.oci/config
+        echo "user=${user_ocid}" >> ${OCI_WORKSPACE_DIR}/GitHubConnection/backend/src/.oci/config
+        echo "fingerprint=${fingerprint}" >> ${OCI_WORKSPACE_DIR}/GitHubConnection/backend/src/.oci/config
+        echo "tenancy=${tenancy_ocid}" >> ${OCI_WORKSPACE_DIR}/GitHubConnection/backend/src/.oci/config
+        echo "region=${region}" >> ${OCI_WORKSPACE_DIR}/GitHubConnection/backend/src/.oci/config
+        echo "key_file=./.oci/privatekey.pem" >> ${OCI_WORKSPACE_DIR}/GitHubConnection/backend/src/.oci/config
+
+  - type: Command
+    name: "Create privatekey.pem file"
+    timeoutInSeconds: 40
+    command: |
+        curl --location ${bucket_preauth_pk} > ${OCI_WORKSPACE_DIR}/GitHubConnection/backend/src/.oci/privatekey.pem
+
+  - type: Command
+    name: "Define unique image tag"
+    timeoutInSeconds: 40
+    command: |
+      export BUILDRUN_HASH=`echo ${OCI_BUILD_RUN_ID} | rev | cut -c 1-7`
+      echo "BUILDRUN_HASH: " $BUILDRUN_HASH
+
+  - type: Command
+    timeoutInSeconds: 1200
+    name: "Build container image"
+    command: |
+      cd ${OCI_WORKSPACE_DIR}/GitHubConnection/backend
+      ls -la
+      docker build -t javademo-oke-app .
+outputArtifacts:
+ - name: javademo-oke-app
+   type: DOCKER_IMAGE
+   location: javademo-oke-app:latest

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oracle JavaDay Bot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #37474F; /* Fundo cinza escuro */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #chat-container {
+            width: 350px;
+            background-color: #ffffff; /* Fundo branco para o chat */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 2px solid #FFB74D; /* Borda amarela */
+        }
+
+        #chat-header {
+            background-color: #37474F; /* Fundo cinza escuro */
+            color: #ffffff; /* Texto branco */
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        #chat-header img {
+            height: 24px;
+            width: auto;
+        }
+
+        #chat-box {
+            height: 400px;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: #B0BEC5; /* Fundo azul claro */
+            border-bottom: 2px solid #FFB74D; /* Borda inferior amarela */
+        }
+
+        .message {
+            margin: 10px 0;
+            padding: 10px 15px;
+            border-radius: 20px;
+            max-width: 80%;
+            word-wrap: break-word;
+            font-size: 14px;
+        }
+
+        .user-message {
+            background-color: #EF5350; /* Vermelho alaranjado para mensagens do usuário */
+            color: #ffffff; /* Texto branco */
+            text-align: right;
+            align-self: flex-end;
+        }
+
+        .bot-message {
+            background-color: #FFFFFF; /* Mensagens do bot em branco */
+            color: #37474F; /* Texto cinza escuro */
+            text-align: left;
+            align-self: flex-start;
+            border: 1px solid #FFB74D; /* Borda amarela para destaque */
+        }
+
+        #chat-input-container {
+            display: flex;
+            border-top: 2px solid #FFB74D; /* Borda superior amarela */
+            background-color: #ffffff; /* Fundo branco */
+        }
+
+        #message-input {
+            flex: 1;
+            border: none;
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 0;
+            outline: none;
+        }
+
+        #send-button {
+            background-color: #FFB74D; /* Botão de enviar amarelo */
+            color: #37474F; /* Texto do botão cinza escuro */
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 0;
+            transition: background-color 0.3s;
+        }
+
+        #send-button:hover {
+            background-color: #FFB74D; /* Escurecimento do botão ao passar o mouse */
+            filter: brightness(90%);
+        }
+    </style>
+</head>
+<body>
+
+<div id="chat-container">
+    <div id="chat-header">
+        <span>Oracle JavaDay Bot</span>
+        <img src="./static/oraclelogo.png" alt="Oracle Logo">
+    </div>
+    <div id="chat-box">
+        <!-- As mensagens serão adicionadas aqui -->
+    </div>
+    <div id="chat-input-container">
+        <input type="text" id="message-input" placeholder="Digite sua mensagem">
+        <button id="send-button">Enviar</button>
+    </div>
+</div>
+
+<script>
+    document.getElementById('send-button').addEventListener('click', function() {
+        const messageInput = document.getElementById('message-input');
+        const messageText = messageInput.value.trim();
+
+        if (messageText !== "") {
+            addMessage(messageText, 'user-message');
+            messageInput.value = "";
+        }
+    });
+
+    function addMessage(text, className) {
+        const chatBox = document.getElementById('chat-box');
+        const messageElement = document.createElement('div');
+        messageElement.className = `message ${className}`;
+        messageElement.innerText = text;
+        chatBox.appendChild(messageElement);
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        if(className == "user-message"){
+            //Envia para o Backend Java Spring AI
+            const raw = "";
+
+            const requestOptions = {
+            method: "POST",
+            redirect: "follow"
+            };
+
+            fetch("http://<public-ip-address>:8080/demoapp/api/genai/chat?prompt="+text, requestOptions)
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.chat) {
+                addMessage(data.chat,'bot-message')
+                console.log("Texto do Chat:", data.chat);
+                } else {
+                console.log("Campo 'chat' está vazio ou não encontrado.");
+                }
+            })
+            .then((result) => console.log(result))
+            .catch((error) => console.error(error));
+        }
+    }
+
+    function generateBotResponse(userMessage) {
+        return "Essa é a resposta do robô para: " + userMessage;
+    }
+
+
+</script>
+
+</body>
+</html>

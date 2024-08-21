@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-oke-app
+  namespace: oracle
+spec:
+  selector:
+    matchLabels:
+      app: javademo-oke-app
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: java-oke-app
+    spec:
+      containers:
+      - name: java-oke-app
+        image: <region-id>.ocir.io/<namespace-tenancy>/oke-apps/javademo-oke-app:${BUILDRUN_HASH}
+        imagePullPolicy: Always
+        ports:
+        - name: java-oke-app
+          containerPort: 8080
+          protocol: TCP
+      imagePullSecrets:
+        - name: ocirsecret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: java-oke-app-svc
+  namespace: oracle
+spec:
+  selector:
+    app: javademo-oke-app
+  ports:
+    - port: 8080
+      targetPort: 8080
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: java-oke-app-ing
+  namespace: oracle
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+  - http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: java-oke-app-svc
+              port:
+                number: 8080
