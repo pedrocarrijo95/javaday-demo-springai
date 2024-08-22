@@ -1,35 +1,185 @@
-# OCI Generative AI - Spring Cloud Oracle Sample
+# Java Spring Cloud - OCI Generative AI - Java Management Service Bucket (Demo)
 
-Esta amostra demonstra começar rapidamente com o Spring Cloud Oracle para trabalhar com o Oracle Cloud Infrastructure (OCI) Generative AI Service. Essa amostra implementa um serviço REST simples que usa internamente as APIs de IA do Spring Cloud Oracle Generate.
+
+
+Este exemplo demonstra como começar rapidamente com o Spring Cloud Oracle para trabalhar com o Oracle Cloud Infrastructure (OCI) Generative AI Service. 
+
+Este exemplo implementa um serviço REST simples que usa internamente APIs Spring Cloud para Oracle Generative AI e OCI SDK para Object Storage Buckets.
+
+Com o objetivo de construir um chatbot para gerenciamento de workloads Java com IA Generativa, integramos com um Bucket Oracle que contém relatórios do Java Management Service e utilizamos estes relatórios como contexto para o Gen AI, chamamos isso de RAG.
+
+
+
 
 ## O que é o Spring Cloud Oracle?
 
-Spring Cloud for OCI, facilita a integração de serviços de OCI com a ajuda de SDK Java OCI interno. Ele oferece uma maneira conveniente de interagir com serviços fornecidos pela OCI usando expressões idiomáticas e APIs bem conhecidas da Spring, como a API de mensagens ou armazenamento. Os desenvolvedores podem criar aplicativos em torno dos serviços hospedados sem se preocupar com infraestrutura ou manutenção. O Spring Cloud for OCI contém suporte de autoconfiguração para serviços gerenciados por OCI.
 
-## O que é IA gerativa OCI?
+O Spring Cloud para OCI facilita a integração dos serviços da OCI com a ajuda do SDK Java interno da OCI. 
 
-A IA gerativa é um serviço de infraestrutura Oracle Cloud totalmente gerenciado que fornece um conjunto de modelos de linguagem grande (LLMs) personalizáveis e de última geração que cobrem uma ampla gama de casos de uso, incluindo bate-papo, geração de texto, resumição e criação de incorporações de texto.
+Ele oferece uma maneira conveniente de interagir com os serviços fornecidos pela OCI usando conceitos e APIs bem conhecidos do Spring, como as APIs de mensagens ou armazenamento. 
+
+Os desenvolvedores podem criar aplicações em torno dos serviços hospedados sem se preocupar com infraestrutura ou manutenção. 
+
+O Spring Cloud para OCI conta com suporte de autoconfiguração para os serviços gerenciados pela OCI.
+
+
+
+
+## O que é a IA generativa da OCI?
+
+
+O Generative AI é um serviço totalmente gerenciado do Oracle Cloud Infrastructure que fornece um conjunto de modelos de linguagem grandes (LLMs) personalizáveis e de última geração que abrangem uma ampla gama de casos de uso, incluindo bate-papo, geração de texto, resumo e criação de embeddings de texto.
+
+## O que é o Java Management Service (JMS) da OCI?
+
+
+O Java Management Service (JMS) da OCI é uma plataforma que facilita o monitoramento, gerenciamento e atualização de aplicações Java em ambientes on-premises e na nuvem. Ele oferece insights sobre versões de Java, desempenho e segurança, permitindo uma gestão centralizada e eficiente dos recursos Java.
+
+
+
 
 ## Pré-requisitos
-Os itens de configuração necessários para executar o Aplicativo podem ser configurados em 'application.properties'.
+Defina as variaveis demarcadas por `< >` nas classe `DownloadJsonFromBucket.java`.
+  * Exemplo:
+    * `namespaceName`
+    * `bucketName`
+    * `report-folder-path`
 
-* 'spring.cloud.oci.region.static' - Nome da região da OCI (Ex: us-phoenix-1) onde os recursos da OCI precisam ser criados.
-* 'spring.cloud.oci.config.type' - Tipo de autenticação a ser usado para OCI. Pode ser um dos seguintes: RESOURCE_PRINCIPAL, INSTANCE_PRINCIPAL, SESSION_TOKEN, SIMPLE, FILE e WORKLOAD_IDENTITY. Se nada for especificado, o tipo FILE é usado por padrão.
-* 'spring.cloud.oci.config.file' - O caminho do arquivo definido para esta propriedade será usado como o arquivo de configuração para autenticação de tipo FILE que usa o arquivo de configuração OCI. Se nada for especificado, o arquivo de configuração OCI do diretório inicial do usuário será usado.
-* 'spring.cloud.oci.config.profile' - Perfil a ser usado no arquivo de configuração OCI para autenticação. Se um perfil não for especificado, um perfil DEFAULT será usado.
+Os itens de configuração necessários para executar o aplicativo podem ser configurados em `application.properties`.
 
-Se o 'spring.cloud.oci.config.type' for simples, as seguintes propriedades também precisam ser definidas no 'application.properties'.
 
-* 'spring.cloud.oci.config.userId'
-* 'spring.cloud.oci.config.tenantId'
-* 'spring.cloud.oci.config.fingerprint'
-* 'spring.cloud.oci.config.privateKey'
-* 'spring.cloud.oci.config.passPhrase'
-* 'spring.cloud.oci.config.region'
+* `spring.cloud.oci.region.static` - Nome da região da OCI (por exemplo, us-phoenix-1) onde os recursos da OCI precisam ser criados.
 
-Consulte [OCI SDK Authentication Methods] (https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm) para obter mais detalhes sobre os tipos de autenticação suportados pela OCI.
+* `spring.cloud.oci.config.type` - Tipo de autenticação a ser usado para OCI. Ele pode ser um dos seguintes: RESOURCE_PRINCIPAL, INSTANCE_PRINCIPAL, SESSION_TOKEN, SIMPLE, FILE e WORKLOAD_IDENTITY. Se nada for especificado, o tipo FILE será usado por padrão.
 
-## Lançamento rápido
+* `spring.cloud.oci.config.file` - O caminho do arquivo definido para essa propriedade será usado como o arquivo de configuração para a autenticação do tipo FILE, que usa o arquivo de configuração OCI. Se nada for especificado, será usado o arquivo de configuração OCI do diretório inicial do usuário.
 
-Clone o repositório manualmente com as seguintes instruções:
-ORACLE E seus AFFILIATOS NÃO fornecem qualquer garantia o que quer, expressão ou implícito, por qualquer software, material ou conteúdo de qualquer tipo contido ou produzido dentro desta REPOSITÓRIO, e em particular especificamente desconexão qualquer e todas as WARRITAS IMPRESAIAS IMPREDAS DISCLAMENTO E TODAS as WARRANÇAS IMPRESADA DE TITLE, NÃO INFRENTE, MERCANTAMENIDADE E FITNESSO PARA PARU PARP. Além disso, o ORACLE E seus AFFILIATOS NÃO REPRESENTEM QUE QUALQUER SEGURANÇA CUSTOMARIA REVISÃO FOI PERFORMADA COM RESPOSTO A QUALQUER SOFTWARE, MATERIAL OU CONTENTO CONTAINDO OU PRODUDUDA DNTE ESTE REPOSITÓRIO. Além disso, e sem limitar o envelhecimento, as terceiros partes podem ter postado SOFTWARE, MATERIAL OU CONTEÚDO A ESTE REPOSITÓRIO sem QUALQUER REVISÃO. Use em seu próprio risco. 
+* `spring.cloud.oci.config.profile` - Perfil a ser usado no arquivo de configuração da OCI para autenticação. Se um perfil não for especificado, será usado um perfil DEFAULT.
+
+
+
+
+Se o `spring.cloud.oci.config.type` esta definido como SIMPLE, então as seguintes propriedades também precisam ser definidas no `application.properties`.
+
+
+
+
+* `spring.cloud.oci.config.userId`
+
+* `spring.cloud.oci.config.tenantId`
+
+* `spring.cloud.oci.config.fingerprint`
+
+* `spring.cloud.oci.config.privateKey`
+
+* `spring.cloud.oci.config.passPhrase`
+
+* `spring.cloud.oci.config.region`
+
+
+
+
+Consulte [OCI SDK Authentication Methods](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm) para obter mais detalhes sobre os tipos de autenticação compatíveis com a OCI..
+
+
+
+
+## Início rápido
+
+
+
+
+Clone o repositório manualmente com as instruções a seguir em uma VM OCI:
+
+
+
+
+```
+
+git clone https://github.com/pedrocarrijo95/javaday-demo-springai.git
+
+```
+
+
+
+
+## Primeiros passos
+
+
+
+
+1. Execute `mvn clean install` do diretório raiz do código do repositório.
+
+
+
+
+1. Defina os valores apropriados em `application.properties` para as seguintes propriedades. (Consulte a documentação do Spring Cloud Oracle para obter mais detalhes).
+Exemplo:
+```
+
+spring.cloud.oci.region.static = US_ASHBURN_1 
+
+
+
+spring.cloud.oci.genai.embedding.compartment = ${OCI_COMPARTMENT_ID}
+
+spring.cloud.oci.genai.chat.compartment = ${OCI_COMPARTMENT_ID}
+
+
+
+spring.cloud.oci.genai.chat.onDemandModelId = ${OCI_CHAT_MODEL_ID}
+
+spring.cloud.oci.genai.embedding.onDemandModelId = ${OCI_EMBEDDING_MODEL_ID}
+
+```
+
+1. Inicie o aplicativo usando o seguinte comando no diretório raiz do exemplo.
+
+```
+
+mvn spring-boot:run
+
+```
+
+
+
+
+Note: A porta de serviço padrão é `8080`. Você pode alterar isso com a propriedade `server.port`.
+
+
+
+
+## Exemplo de uso
+
+
+
+Inicie o Postman e faça uma solicitação POST para:
+
+```
+
+http://<oci-compute-public-address>:8080/demoapp/api/genai/chat?prompt=Me de detalhes de migracao da minha app
+
+```
+
+### Resultado
+![postman](https://github.com/user-attachments/assets/3165dd19-8ec1-4aa0-9753-15c43ef7f3c5)
+
+
+
+
+
+**OBS:** 
+
+* Analise os arquivos Dockerfile, build_spec.yaml, manifest-app.yaml para ajustar ao seu ambiente OCI e integrar com esteira CI/CD Devops e OKE.
+
+* Verifique todo o código e tenha a certeza que adicionou os valores obrigatórios de variáveis.
+
+   * Ex: CompartmentID, BucketName, TenancyNamespace, PathFolder etc..
+
+## Referências
+
+* [Spring Cloud Oracle - Documentation](#)
+
+* [Spring Cloud Oracle - Open Source](https://github.com/oracle/spring-cloud-oci)
+
+* [OCI SDK - Documentation](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdks.htm)
