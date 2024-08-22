@@ -8,8 +8,8 @@ O repositório apresenta **duas arquiteturas** distintas: uma versão **simplifi
 
 
 ### Simplificada
-![Arquitetura Resumida](./blueprints/ArquiteturaJavaDemo-resumida.png) 
+![Arquitetura Resumida](./blueprints/ArquiteturaSimplificada.png) 
 
 
 ### OKE + Pipeline Devops
-![Arquitetura Completa](./blueprints/ArquiteturaJavaDemo-completa.png)  
+![Arquitetura Completa](./blueprints/ArquiteturaDevops.png)  
