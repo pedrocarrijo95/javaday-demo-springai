@@ -4,7 +4,7 @@
 
 Este exemplo demonstra como começar rapidamente com o Spring Cloud Oracle para trabalhar com o Oracle Cloud Infrastructure (OCI) Generative AI Service. 
 
-Este exemplo implementa um serviço REST simples que usa internamente APIs Spring Cloud para Oracle Generative AI e OCI SDK para Object Storage Buckets.
+Implementamos um serviço REST simples que usa internamente APIs Spring Cloud para Oracle Generative AI e OCI SDK para Object Storage Buckets.
 
 Com o objetivo de construir um chatbot para gerenciamento de workloads Java com IA Generativa, integramos com um Bucket Oracle que contém relatórios do Java Management Service e utilizamos estes relatórios como contexto para o Gen AI, chamamos isso de RAG.
 
