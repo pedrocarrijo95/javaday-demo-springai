@@ -1,6 +1,7 @@
 # Potencializando o Desenvolvimento de Aplicações com Java Management e GraalVM: Aprimorando sua cultura DevSecOps com GenAI 
 Não pode comparecer mas gostaria de assistir e ver como foi? 
-Acesse: [JavaDay - Assistir](https://videohub.oracle.com/media/JavaDay+-+Oracle+28_08_24/1_044ld0my/158145621)
+
+Acesse: [JavaDay - Vídeo Gravado](https://videohub.oracle.com/media/JavaDay+-+Oracle+28_08_24/1_044ld0my/158145621)
 
 Este repositório contém um projeto demonstrativo que integra uma variedade de tecnologias avançadas para potencializar o desenvolvimento de aplicações Java. 
 
